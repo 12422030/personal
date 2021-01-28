@@ -1,0 +1,44 @@
+char * mivs_base_cuthz(char *msg ,int qs,int len, char *rmsg)
+{
+    int i,j,k,m,n,p;
+    static int qs1;
+    if(len<0)
+    {   
+        qs1=0;
+        return msg;
+    }   
+
+    if(qs<=1)
+        qs1=0;
+
+    m = qs1;
+    p = len;
+    j=0;k=0;n=0;
+    if ( m > 0 && m >= strlen(msg) )
+    {   
+        rmsg[0] = 0 ; 
+        return NULL ;
+    }   
+    j=0;k=0;n=0;
+    for ( i=m;i<m+p;i++)
+    {   
+        k = msg[i];
+        if ( k <0 || k > 128 )
+        {   
+            n++;
+            if ( n%2 == 0 ) 
+                j=0;
+            else
+                j=1;
+        }   
+        else
+        {   
+            n=0;
+            j=0;
+        }   
+    }   
+    if ( j == 1 ) p-- ;
+    strncpy(rmsg,msg+m,p);
+    qs1 = m+p;
+    return msg;
+}

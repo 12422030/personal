@@ -1,0 +1,26 @@
+MKDIR=/bin/mkdir
+CP=/bin/cp
+RM=/bin/rm -rf 
+MV=/bin/mv
+
+TARGET=$(HOME)/src/fyck/commlib/java
+SRC_FOLDER=$(HOME)/src/fyck/commlib/java/src
+LIB_FOLDER=$(HOME)/lib
+
+SRC_FILES=$(SRC_FOLDER)/*.java
+
+CLASSPATH= $(HOME)/lib/itext-2.1.0.jar: $(HOME)/lib/iTextAsian.jar:
+
+JAR_FILE=`echo $(CLASSPATH) |sed 's/[ ]//g'`
+all:
+    echo $(CLASSPATH)
+    $(RM) $(TARGET)/classes/*
+    $(MKDIR) -p $(TARGET)/classes
+    for n in $(SRC_FILES); do \
+    echo compiling $$n...;\
+    javac -classpath $(JAR_FILE) -sourcepath $(SRC_FOLDER) -d $(TARGET)/classes $$n || exit 1;\
+    done
+
+clean:
+        @echo "Íê³É"
+        @echo $(JAR_FILE)

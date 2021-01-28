@@ -1,0 +1,153 @@
+1、检查操作系统及内存情况：lsb_release -a;
+
+2   检查java 环境：java -version
+
+3   新建用户空间、用户和组：
+
+//创建用户目录
+
+mkdir /home/mqm
+
+//创建用户组
+
+groupadd mqm
+
+//创建用户
+
+useradd -g mqm -d /home/mqm -m -s /bin/bash mqm
+
+4 创建MQ安装文件夹：
+
+//更改目录权限
+
+chown -R mqm:mqm /home/mqm
+
+//创建MQ安装位置和工作空间
+
+mkdir /opt/mqm (安装目录)
+
+mkdir /var/mqm  （数据目录）
+
+mkdir /var/mqm/log  （日志目录）
+
+mkdir /var/mqm/errors（出错目录）
+
+chown -R mqm:mqm /opt/mqm
+
+chown -R mqm:mqm /var/mqm
+
+（3）vi mqlicense.sh
+
+在setJRE下
+
+JRE＝目录+/bin/java
+
+PATH=$PATH:/bin:/usr/local/bin:/usr/bin:/usr/sbin:/etc:/opt/mqm/bin:.
+
+export PATH
+
+MQM_HOME=/opt/mqm
+
+export MQM_HOME
+
+CLASSPATH=$MQM_HOME/java/lib/com.ibm.mq.jar:$MQM_HOME/java/lib/com.ibm.mqbind.jar:$MQM_HOME/java/lib/com.ibm.mqjms.jar:$MQM_HOME/java/lib/jms.jar:$MQM_HOME/java/lib/jms.jar:$MQM_HOME/java/lib/jndi.jar:$MQM_HOME/java/lib/jta.jar:$MQM_HOME/java/lib/ldap.jar:$MQM_HOME/java/lib/connector.jar:$MQM_HOME/java/lib/fscontext.jar:$MQM_HOME/java/lib/postcard.jar:$MQM_HOME/java/lib/providerutil.jar:$CLASSPATH
+
+export CLASSPATH
+
+(4)在/home/mqm空间中解压安装包，并执行如下安装：
+
+rpm -ivh MQSeriesRuntime-6.0.1-0.x86_64.rpm
+
+rpm -ivh MQSeriesServer-6.0.1-0.x86_64.rpm
+
+rpm -ivh MQSeriesSDK-6.0.1-0.x86_64.rpm
+
+rpm -ivh MQSeriesSamples-6.0.1-0.x86_64.rpm
+
+rpm -ivh MQSeriesJava-6.0.1-0.x86_64.rpm
+
+rpm -ivh MQSeriesClient-6.0.1-0.x86_64.rpm
+
+安装验证：
+
+rpm -qa |grep MQSeries
+
+(5) MQ配置：
+
+创建队列管理器：crtmqm 队列管理器名
+
+启动队列管理器：strmqm  队列管理器名
+
+开户strmqbrk代理：strmqmbrk -m 队列管理器名
+
+进入MQ的控制台：runmqsc 队列管理器名
+
+定义管道： define channel(CH1) chltype(SVRCONN) trptype(TCP) mcauser('mqm')
+
+退出控制台：end
+
+建立队列管理器基本的 Queue:
+
+在MQ的安装目录java/bin下执行：runmqsc GCP_QM < MQJMS_PSQ.mqsc，建立一些基本的queue
+
+建立其它所需的Queue
+
+DEFINE QLOCAL （TEST_MQ_LOCALQ1） REPLACE  DEFPSIST(NO)  MAXDEPTH(1000)//创建本地队列
+
+DEFINE QMODEL （TEST _ME_MODELQ1)  REPTYPE(PERMDYN)   DEFPSIST (NO)  MAXDEPTH(1000) SHARE REPLACE
+
+启动监听：
+
+runmqlsr -m 队列管理器名  -t tcp -p 端口号
+
+查看队列管理器字符集：
+
+dis qmgr
+
+修改字符集：
+
+alter qmgr CCSID(字符集号) ；
+
+修改后停止队列管理器： endmqm –i  队列管理器名 s
+
+重启队列管理器：strmqm 队列管理器名。
+
+---------------------------
+
+开启查看代理的运行状态：
+
+strmqbrk -m 队列管理器名
+
+dspmqbrk -m 队列管理器名
+
+管理控制台常用命令：
+
+进入管理控制台：runmqsc 队列管理器名
+
+查看通道的信息
+
+DISPLAY CHANNEL （通道名）//通道名为CH1,CH2之类的
+
+查看队列管理器状态及关闭队列管理器：
+
+查看：dspmq
+
+关闭队列管理器：endmqm -i 队列管理器名
+
+删除及创建通道：
+
+在管理控制台中执行
+
+进入管理控制台：runmqsc  队列管理器名
+
+删除通道:DELETE CHANNEL (通道名)
+
+新建通道：define channel (通道名) chltype (SVRCONN)  trptype (TCP)  mcauser('mqm')
+
+显示队列管理器中的所有队列：
+
+dis q(*)
+
+查看指定队列的详细信息：
+
+dis q (队列名称)// 例如TEST1.Q

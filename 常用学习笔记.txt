@@ -1,0 +1,817 @@
+TB=1024GB    (吉字节)
+1GB=1024MB    (兆字节)
+1MB=1024KB    (千字节)
+1KB=1024Byte  (字节)
+1Byte=8bit    (比特,或 位)
+                    ps -efL|grep LOAN-F
+                    pmap -d 
+
+                    ftp是一种文件传输协议。
+                    sftp是基于ssh协议的加密ftp传输协议。
+                    vsftpd是一款ftp服务器（软件），支持ftp协议，不支持sftp协议
+
+ipcs -m    内存
+ipcs -m -p  
+ipcs -s    信号量
+ipcs -q    队列
+
+cc -g -o fsnd filesnd.c
+cc 1.c 2.c
+cc 1.c libliwei.so
+
+sed -i "s/sqlint32/sqlint64/" ./*.sqc
+
+远程复制文件：
+scp /app/clear.sh appuser@16.16.17.122:/app/user/liwei/
+scp appuser@16.16.17.122:/app/user/yues/test.txt /app/user/liwei/
+
+在当前文件光标行后追加写liwei.sh文件
+r ./liwei.sh
+
+只看文件夹
+ls -F |grep "/$"
+
+查看文件结构 
+ls -R
+
+UPTL 删除已登录柜员                    
+mtoo 菜单码 f   找到scr_code用到了哪些变量编码
+dspdb short_def 查看哪个变量域设置了哪些快查
+dspdb service  查看交易发往哪个ip和端口发送
+
+netstat  -an|grep CLOSE_WAIT|wc -l
+netstat  -an|grep 6666     LISTEN  端口被占用（Linux）
+netstat -Aan|grep 6666    LISTEN  端口被占用 (AIX)
+lsof -i:9070             被那个应用占用
+netstat -nultp|grep 3666
+tar zcf liwei.tar.gz liwei
+du -sh
+
+nmon c 
+nmon m
+top
+df
+free -hs
+du -g
+du -m
+
+#useradd -u 544 -d /usr/testuser1  -g users -m  testuser1
+                    解压：tar zxvf FileName.tar.gz
+                    压缩：tar zcvf FileName.tar.gz DirName
+                    解压：tar jxvf FileName.tar.bz2 
+　　                压缩：tar jcvf FileName.tar.bz2 DirName
+资产类和负债类:
+               		属于银行的钱就叫资产类：例如银行的内部钱。
+               		不属于的钱就叫负债类，比如客户在银行的存款。      
+               		我在银行存款，相当于我把钱借给银行，银行拿去放贷款
+               		我的存款增加，银行就欠我越多，因此银行的负债就增加的多，贷方就增加
+只考虑对银行而言的借贷:
+              		银行的借贷和企业的借贷正好相反。
+	       		借方表示企业支付的钱，
+               		贷方表示企业收到的钱 
+
+1:渠道服务流程:
+
+               1：比如一笔交易从网银界面发起，先发到NETB2-F渠道(服务端)
+               2：NETB2-F里调用EHOST-T流程
+               3：EHOST-T(客户端)再转发到EHOST-F(服务端)
+               4: 网银(客户端)-------NETB2-F(服务端)------call   EHOST-T
+                                  EHOST-T(客户端)------EHOST-F(服务端) 
+2:指针概念:          
+           指针说明：对于指针p来说，*p就是指针p所指向的内存空间存储的值，*p=a就是把p所指向的那一内存空间的值赋值为a，p本身不改变
+      
+           p=&a就是用a的地址对p赋值，a是一个变量，&a就是存储这个变量的内存地址，指针存储的就是一个地址，*p就是这一地址中的内容，
+
+
+3:随机数:       
+       	 要取得[a,b)的随机整数，使用(rand() % (b-a))+ a; 
+	 要取得[a,b]的随机整数，使用(rand() % (b-a+1))+ a; 
+	 要取得(a,b]的随机整数，使用(rand() % (b-a))+ a + 1; 
+	 通用公式:a + rand() % n；其中的a是起始值，n是整数的范围。 
+	 要取得a到b之间的随机整数，另一种表示：a + (int)b * rand() / (RAND_MAX + 1)。 
+ 	 要取得0～1之间的浮点数，可以使用rand() / double(RAND_MAX)。
+
+4：
+         SubSignString
+         grep -r 3002517 SAAS-F.log >2.txt
+         grep -r A *
+         to spIB04.c
+5：
+  查看数据库字符集,在数据库sql工作表中执行
+         select userenv('language') from dual;
+6：   
+  数据泵导出表数据    
+         exp cbvs/cbvs file=./tx_sub_parm.dmp log=expout.log tables=tx_sub_parm
+
+7:  
+  修改程序前备份：
+                cp spVC01 spVC01.20160816
+ 
+                生成渠道部署，数据库要备份就是--右键--卸载，选择文件存放路径。
+8:2016-08-16:
+                到dd_mst_hst里面看交易成功与否：
+                查找流水号trace_no到dd_mst_hst里面查看是否交易成功。
+                src / zjjk.sh 。
+                ctrl + c后输入 lsttx VCA1 。
+                shitf + g 。
+
+9： 发起交易，并查看日志：
+
+                src/cibk/netb2/netb2Snd/Msg/vim +交易号（2020585）。
+                在里面改号码，依次加 1。
+                改完之后仿真交易netb2Snd 交易号（2020585）。
+                查错cd log vim NETB2-F.log(应用级)，xip.log（系统级）。
+
+10： 数据库错误代码查看：
+
+                [netb_batchsum.c][1583]INSERT netb_batchsum error -1
+                [Netb2InsBatFile.c][132]Call Netb_batchsum_Ins Err. ret=[-239]
+                oerr ora 239
+
+11： 启动服务：
+
+                目标通信渠道失败需要启动服务:esbHostTcpServer ESBSVR EHOST-F 6660
+
+12： 查看：
+                ps -ef|grep ESB    查看启动的服务。
+                ps -ef|grep MMS    查看端口号。
+
+13： 查找.c文件：
+                删除swp文件：  rm -rf ./*.swp
+                删除叹号:      rm -rf -i !
+                删除叹号：     rm -rf -- '\'
+                fxht里面输入命令查找：find . -name spVC01.c
+                fxxip里面输入命令查找：find . -name "*.c"|xargs grep "Netb2chanBatFil20581"   
+
+14： ftp 192.168.10.202
+
+                cd到找到要get的.c文件，之后bin（二进制），然后再get + 程序名，
+                就会默认拷贝到--用户--Administrator目录下。
+                退出时打quit指令。
+
+--------------------------------------------------------------------------------------------------------------------------
+
+15: 修改账号信息： 
+                ./txt/cibk/zqzq.txt 
+                ./userftp/zqzq.txt
+                 循环节点：
+                 一行有10个字段。
+16: 启动服务添加密码：
+                 1: dbencrypt选择1，数据库类型o，EACRCD-F，fxxip,fxxip然后就生成一个密码，放到etc/DB.cfg里面.
+                 2: XIPCHKIP.cfg里面加上EACRCD-F=N|
+                 3: cd/etc/vim DB.cfg 和 dbencrypt
+                 4：cd esbxml/subsys/eacrcd/server 
+                 复制一个文件改成自己对应的名字，例如: cp esbCrcdTcpServer.c esbACrcdTcpServer.c//OBJS里面                                  加上调用的esbACrcdTcpServer.c函数。
+
+17: oerr ora 942：
+
+               表或者视图不存在，一般是 midl 改成 fxmidl；
+               未找到错误信息，执行失败，找40行，cibk_base_head.c，查看前面的表，要是有，就看数据进去没，要是没有，就把缺                    失的数据项添进去。
+               插入薄失败，执行函数 Reglog 失败 ！就去找对应的函数，看前面的表，有没有，有就去看表格的 .pc 文件，把midl改                    成fxmidl。     
+               xip_ftpparm和xip_ftpexecsequ里面填写相应的路径。/fxbank/fxxip
+
+18: 清空密码限制：
+                 fxht下 cd backup pass_err 删除就好了。
+
+19: 屏蔽掉通信：
+                if  P0320    ==    #ffff
+                comm
+                endif
+
+20: 查找可用的账号：
+
+                  DD_MST    AC_TYPE='5' and AC_STS='1' 找到AC_ID，然后再去MDM_AC_REL中，根据AC_ID找可用的AC_NO账号。
+
+21: 查看端口号 ps -ef|grep MMS查看端口号 
+               cd etc/vim MmsUser.cfg加上liwei='A'
+               MmsPassInit liwei  112233 生成密码，后两位去掉,添加到数据库mms_user表中。
+
+22:           echo $ORACLE_SID查看数据库实例名
+              echo $PASSERR 查看环境变量对应的路径
+
+23:数据库启服务：
+               首先使用oracle用户登录Linux，然后在shell命令行中执行下面的命令：
+                 su -oracle oracle       
+               $ lsnrctl start       
+               $ sqlplus /nolog
+               conn /as sysdba
+               SQL> startup
+
+24: 部署交易操作流程： 
+                   先ftp 192.168.10.202进入ftp，再fxxip，pass登陆。       
+                   如果在渠道内。则直接在xshell里面sh.文件名.sh就可以。
+                   如果在电脑里， 先cd/xtbank/xtxip根目录下，cd/xtbank/xtxip/src放在src目录下。
+                   lcd C:\  从c盘目录下直接取得。
+                   bin 二进制
+                   put 往里面放，get往外面拿出。
+                   在xshell里面，再sh文件。
+ 
+25: 前台操作中，输入mtoo 7C01 f可以查看此7C01界面的所有变量编码。
+
+26: find . *.h|xargs grep "XHAFG" 看参数的数量编码，确定传值情况。
+            
+--------------------------------------------------------------------------------------------------------------------------
+
+27: 后台日志，先zjjk.sh--->lsttx VCJ1,从头往下找生成的日志文件路径 /fxbank/fxht/txt/CBS7130173950。
+ 
+28: 改完程序测试的流程。主机营业日期与网点营业日期不一致，三张表：ht下的 com_sys_parm 和 dc_sys_parm，和 xip下的 xip_sysdate 
+                                             
+                                             lis_date   sys_date     xip_date  xipydate  xip_tdate
+                                        com: 20150511   20150512     20150512  20150511   20150513
+                                        dc : 20150511   20150512
+29:    
+    xip_ftpexecsequ: NETB2-L  FTP接收前端 NETB2GET GET  /fxbank/fxxip/txt/cibk  /fxbank/fxxip/userftp
+                     NETB2-L  FTP发送前端 NETB2PUT PUT  /fxbank/fxxip/txt/cibk  /fxbank/fxxip/userftp
+     
+    xip_ftpparm:     NETB2-L  NETB2GET 192.168.10.202 fxxip pass 
+                     NETB2-L  NETB2PUT 192.168.10.202 fxxip pass
+
+30: 发起仿真交易的程序，一般要往表里面添加数据。如在xip_parmconv中，添加 CCCHNL  EACRCD-F  Y  1 数据进去。 
+
+
+31: char brf[21];
+    APPLOG("D","报文头内容[%s](报文体长度)", brf);
+    strcpy(tx_brf,"贷记卡转入");
+                                         
+-------------------------------------------------------------------------------------------------------------------------- 
+32: tx_flow_def  VBA1--0--VB00--#=0000@2@#$ 
+                 VBA1--2--VB01--#=0000@5@#$
+                 VBA1--5--VB01--#=0000@10@#$   (如果改flow_code,对应的都要改，不然调用程序会有问题)
+
+    tx_sub_def   VB00---->spVB001           
+    
+    tx_sub_rel   VBA1---->VB00
+
+33: 根据条件去表里查询：
+              
+              sprintf(sWherelist,"tx_type='%s' and parm_code='%s' and parm_seqn=%ld ",tx_type,parm_code,parm_seqn);
+    
+              iRet = Pubc_sysparm_Sel(sReply, &pubc_sysparm, sWherelist) ; 
+34:
+       
+              sprintf(wherelist+strlen(wherelist),"and parmseq='%s' and ",parmSeqn);
+
+              /依次接到上条数据的结尾。   
+
+              sprintf(wherelist+strlen(wherelist),"1=1");
+
+              /防止上条为空。
+
+35:           createtmpfile(fpfile);
+              fp=fopen(filepath,"w");
+              if(fp==null);
+              strtrim(v_pmts_parm.syscode);
+              sprintf(wherelist,"parmtype='%s' and syscode='%s' ",v_pmts_parm.parmtype,v_pmts_parm.syscode);    
+-------------------------------------------------------------------------------------------------------------------
+36:     
+              mopm NB21 生成屏幕的前处理 中处理 后处理 
+              mmqt scNB21.so                    
+37:        
+              :%s/NB08/NB21/g  回车
+              将NB08用NB21替换掉
+
+38: 数据库服务启动 
+              splplus / as sysdba
+              startup             
+               
+              借记卡：DBIT
+              贷记卡：CRDIT
+
+39: 
+        gDC99：
+               切完日期，执行--->日终单步>---gDC99--->执行，以防登记不上dc_log表   
+        gCK01
+               检查平不平
+        科目：
+               com_parm
+               in_parm
+               in_parm_turn
+               dc_acc_rel
+               com_item
+        撤销：    
+               com_rollbak
+               com_rollback_ctl          
+        更新注意事项：
+                  txt/ibps 创建文件路径
+                  前台：NB77交易部署，pfm, sdNB77.so scNB77.so（在后台执行脚本，注意数据库名）
+                  
+            渠道：渠道部署  交易部署 动态库 表虚拟机构、柜员   bin binsh etc下的配置文件
+         
+            后台：动态库， 科目表的配置，交易动态库，交易部署。建表脚本
+
+40:
+     短连接 
+           连接->传输数据->关闭连接 
+           HTTP是无状态的，浏览器和服务器每进行一次HTTP操作，就建立一次连接，但任务结束就中断连接。 
+           也可以这样说：短连接是指SOCKET连接后发送后接收完数据后马上断开连接。 
+  
+     长连接 
+           连接->传输数据->保持连接 -> 传输数据-> 。。。 ->关闭连接。 
+           长连接指建立SOCKET连接后不管是否使用都保持连接，但安全性较差。
+
+41:
+   发送接收方式 
+
+          1、异步 
+
+             报文发送和接收是分开的，相互独立的，互不影响。这种方式又分两种情况： 
+             (1)异步双工：接收和发送在同一个程序中，由两个不同的子进程分别负责发送和接收 
+             (2)异步单工：接收和发送是用两个不同的程序来完成。
+ 
+          2、同步 
+
+             报文发送和接收是同步进行，既报文发送后等待接收返回报文。 同步方式一般需要考虑超时问题，即报文发出去后不能无限等待，需要设定超时时间，超过该时间发送方不再等待读返回报文，直接通知超时返回。
+42:
+
+    zip -r file.zip file           压缩
+    tar -cvf file.tar file.zip     打包
+    tar -xvf file.tar              解包
+    unzip file.zip -d              释放压缩包
+    tar -czvf webapp.tar.gz webapp
+    tar -xzvf webapp.tar.gz
+-------------------------------------------------------------------------------------------------------------------------------------------------- 
+43: Linux下编译c语言程序：
+                     cc cscscs.c -o cscscs
+                     ./cscscs查看编译结果
+                     cc chengxu.c
+                     ./a.out
+---------------------------------------------------------------------------------------------------------------------------------------------------
+44: 拆文件
+    /*读取一行文件，放到tmptr字符中，再根据竖线分隔符去按位数拆，拆完放到一个字符中*/
+ 
+    while( !feof(fpr) )
+   {
+      memset(tmpstr,0x00,sizeof(tmpstr));                 /**初始化一次,不然同一笔数可能会拆两次,组两次文件**/
+      if(fgets( tmpstr, sizeof( tmpstr)-1, fpr )==NULL) break;
+      if(strlen(tmpstr)!=0)
+      {
+         SubSignString(1, BBSP_FGF, tmpstr, trace);
+         strtrim(trace);
+         if(strlen(trace)!=0)
+         {
+            if(strncmp(trace,"IBPS",4)==0)
+            {
+               fprintf(fpw,"%s",tmpstr);
+               set_zd_data("0920","IBPS");
+             }
+             else if(strncmp(trace,"IBPS",4)!=0)
+            {
+               set_zd_data("0910","NETB2");
+             }
+             num1++;
+           }
+       }
+      num2++;
+}
+45:
+    /*往核心传文件必须字段*
+    set_zd_data(BATCHFILEFLAG, "1");           /**批量标志**/
+    set_zd_data(SENDFILENAME, filename);
+
+46:
+    (strncmp(tradeTp,"TP01",4)==0&&strncmp(fmtoflag,"T",1)==0)
+    if((strncmp(tradeTp,"TP01",4)==0&&strncmp(fmtoflag,"T",1)==0)||(strncmp(tradeTp,"TP02",4)==0&&strncmp(fmtoflag,"T",1)==0))
+    
+47:
+    memcpy(acno,payer+2,3)      //从payer第2位往后，截取3位放到acno中
+                                  如:payer IN123
+                                     acno  123 
+    报文头[00001753epcc.211.001.01Z0000000000088                        ]
+    memcpy(ctm,cMsgHead,8)      //截取前8位位报文长度
+    memcpy(cTmp,cMsgHead+8,15); //从第8位往后截15位
+    memcpy(cTmp,cMsgHead+23,10);//从第23位往后截取10位
+     
+    /** 从si截取前6位放到s2中 **/  
+    s2=strncpy(s2, s1, 6);
+  
+    /** 从第七位开始，往后截取后四位手机号 **/
+    15242626929
+    strncpy(lastfournum,epcc_sign.cardno+(strlen(epcc_sign.cardno)-4),4);
+    strncpy(lastfournum,"15242626929"+7,4)
+    ltoa(num,str,10);           //将num以10进制方式转换为字符串str,尽量不要用，环境可能无此函数
+    sprintf(num,"%ld",number)   //整型转换成字符型
+
+
+48：误删后，重新生成win10应用商店
+    Get-AppxPackage -allusers | Select Name, PackageFullName
+在列表中找到名称为“Microsoft.WindowsStore”(即应用商店)的应用，然后复制右侧对应的包名称。Microsoft.WindowsStore_11701.1001.99.0_x64__8wekyb3d8bbwe
+Add-appxpackage -register "C:\Program Files\WindowsApps\Microsoft.WindowsStore_11701.1001.99.0_x64__8wekyb3d8bbwe\appxmanifest.xml" -disabledevelopmentmode
+
+
+
+49: ldd 查看动态库依赖的库有哪些
+---------------------------------------------------------------------------------------------------------------------------------------------------------------
+50: 导库命令
+select * from dba_directories;                                                    查看DATA_PUMP_DIR
+
+select distinct TABLESPACE_NAME from tabs;                                        查看表空间
+
+:
+expdp xip/xip@cyccb dumpfile=xip.dmp directory=DATA_PUMP_DIR  logfile=csxip.log;
+
+
+EXP SYSTEM/MANAGER BUFFER=64000 FILE=C:\FULL.DMP FULL=Y
+exp hvbe/hvbe@test file=hvbe.dmp log=hvbe.log;
+
+:
+expdp xip/xip@cyccb file=xip.dmp DATA_PUMP_DIR  log=csxip.log;
+
+
+:
+expdp vdmp/vdmp@cyccb file=xip.dmp DATA_PUMP_DIR  log=csxip.log;
+
+
+:
+expdp epcc/epcc@test file=3333.dmp log=333.log;
+
+expdp cnaps2/ykyh2016@test file=cnaps2.dmp log=cnaps2.log;
+
+:expdp convert/convert@yhbank file=sms.dmp log=sms.log;
+
+:
+impdp epcc/epcc@cyccb dumpfile=xip.dmp directory=DATA_PUMP_DIR REMAP_TABLESPACE=WLPTDB:USERS REMAP_SCHEMA=xip:xip logfile=70xip.log;
+
+:
+impdp epcc/epcc@cyccb dumpfile=epcc.dmp remap_tablespace=wlptdb:users log=epcc.log;
+:
+impdp vdmp/vdmp@test dumpfile=vdmp.dmp log=vdmp.log;
+
+
+按照实例导出，按照实例导入。
+
+expdp bbsp/bbsp@yhbank file=20180607.dmp log=20180607.log;
+
+
+impdp bbsp/bbsp@test dumpfile=bbsp.dmp log=bbsp.log;
+
+
+
+:impdp vdmp/vdmp@test dumpfile=vdmp20180222.dmp log=vdmp.log;
+:imp system/manager file=bible_db log=dible_db full=y ignore=y
+:imp vdmp/vdmp@cyccb file=vdmp.dmp log=1.log full=y ignore=y
+imp cnaps2/cnaps2@nyhbank file=cnaps2.dmp log=1.log full=y ignore=y
+注意区分：expdb  impdb   exp  imp
+--------------------------------------------------------------------------------------------------------------------------------------------------------------
+51：创建用户
+l 查看ointall所属组别
+#useradd -u 544 -d /home/webapp -g ointall -m webapp
+useradd -g test -G oinstall -m /home/test -u 588
+useradd -g webapp -G oinstall -m /home/webapp -u 588
+useradd -g webapp -G root -m /home/test -u 588
+useradd -g oinstall -m webapp -u 599
+useradd -g webapp -m bk -u 599
+useradd -r test
+create user xip identified by xip
+
+grant dba to xip;(或者从数据库直接右键创建)
+passwd test
+. .profile
+userdel -r test 完全删除用户
+------------------------------------------------------------------------------------------------------
+52：看位图方法
+20 20 20 20 20 20 20 20 59 31-33 30 30 30 30 30 30 20 20 30         Y13000000  0
+39 33 34 31 30 32 32 34 31 31-39 30 31 30 36 34 30 30 30 30 93410224119010640000
+30 30 30 30 30 30 30 30 30 30-30 39 30 30 30 30 30 64 73 63 00000000000900000dsc
+64 73 B6 A8 C6 DA B1 A3 D6 A4-BD F0 CD E2 B1 D2 BF AA BB A7 ds定期保证金外币开户
+30 30 30 30 30 30 30 30 30 30-33 31 38 33 35 35 30 31 B3 D0 000000000031835501承
+B6 D2 B1 A3 D6 A4 BD F0 31 32-31 38 33 35 35 33 38 38 20 20 兑保证金1218355388  
+20 20 20 20 20 20 20 20 20 20-20 20 20 20 20 20 20 20 20 20      
+20 20 20 20 20 20 20 20 20 20-20 20 20 20 20 20 20 20 20 20  
+------------------------------------------------------------------------------------------------------
+53：网联说明
+    54.0.1.199 行内发ssl
+    ssl发网联https://221.202.188.15:443
+    SignSerNum          4002484925
+    NcrSerNum           4000227192
+    明细文件  221.122.73.122:22;          221.122.73.126:22
+    7070  7080端口  一个是ssl到前置   一个是行内到前置
+------------------------------------------------------------------------------------------------------
+54：$ORACLE_HOME：
+                 /home/oracle/app/product/11.2.0/db_1/network/admin/tnsname.ora
+------------------------------------------------------------------------------------------------------
+55：socket调用步骤:
+                   服务器端过程就是socket->bind->listen->accpet->Read,write
+                   而对于客户端则是socket->connect->read,write
+------------------------------------------------------------------------------------------------------
+56：加密证书分类
+                国密                             国际
+非对称加密:  
+                SM2                              RSA   RSA4096
+ 
+对称加密  :    
+                SM1                              DES  3DES AES(128)
+                                                 AES(128)
+                                                 AES192   AES256
+                SM4
+
+完整性运算:
+                SM3                              SHA1、SHA-256、SHA-384、SHA-512
+------------------------------------------------------------------------------------------------------
+57：截取日志
+    sed -n '100,200p' EPCCBB-F.log >liwei.log
+    head -100 EPCCBB-F.log >liwei.log
+    tail -100 EPCCBB-F.log >liwei.log
+------------------------------------------------------------------------------------------------------
+58：科目属性
+             余额方向双向   发生额为双向   记借方  （科目作为记借方的时候账户余额增加，为贷方的时候余额减少）
+------------------------------------------------------------------------------------------------------
+59：查看各环境变量
+                  HOME、PATH等环境变量，可以“env|grep home”检索下
+    		  etc下的配置文件，可以“grep home *”检索下
+    		  bin、binsh下是否有脚本写死绝对路劲的，可以"grep -r home bin binsh ”检索下
+------------------------------------------------------------------------------------------------------
+60:服务端拆组包
+   收包: 1:接受报文头              iRet=TcpRecv( Mxip_sockid,tmp, 8, Mxip_frtmout);
+         2:截取报文长度            memcpy(len,tmp,8);
+         3:按照报文长度接受报文体  iRet=TcpRcv(Mxip_sockid,buf,len,Mxip_frtmout);
+         4:读取到内存中            doc=xmlReadMemory(pXmlBuf,Mxip_pkglen,NULL,NULL,0);
+         5:组报文体                iRet=Xml2ParseAndAttr("Y",Mxip_frid,"T",Mxip_frtc,Mxip_frfsign,doc,Mxip_rfpath,sTFile.fp,Mxip_rc,"N") ;
+------------------------------------------------------------------------------------------------------
+61:
+select * from epcc_sign inner join epcc_trlog on epcc_sign.name=epcc_trlog.payeracname;
+SELECT epcc_sign.name FROM epcc_sign WHERE epcc_sign.name NOT IN (SELECT epcc_trlog.payeracname FROM epcc_trlog);
+SELECT epcc_sign.signno FROM epcc_sign WHERE epcc_sign.signno NOT IN (SELECT bai_cartoon_sign.signno FROM bai_cartoon_sign);
+------------------------------------------------------------------------------------------------------
+62:
+误删除恢复：
+	   select current_scn from v$database;
+	   select * from epcc_trlog as of scn 48764000;
+	   flashback table epcc_trlog to scn 48764000;    
+------------------------------------------------------------------------------------------------------
+63:
+取流水序列:
+           ----->创建序列<-----
+           sqlplus -s epcc/epcc@test <<EOF >./epccCreSeq.log
+           CREATE SEQUENCE epcc_sequence MINVALUE 1 MAXVALUE 99999999 INCREMENT BY 1 START WITH 1 NOCACHE ORDER CYCLE
+           
+           ----->取流水函数<------ 
+            int EpccGetPlatTrno(TxipCMStc *xip)
+           {
+    		int  ret=0;
+    		long traceno = 0 ;
+    		ret=epcc_getseqence(&traceno, Mxip_rc);
+    		if ( ret != 0 )
+    		{
+        		APPLOG("E", "取系统流水号失败[%d]",ret) ;
+        		return -1 ;
+    		}
+    		set_zd_long(XIPTRACENO, traceno) ;
+    		set_zd_int("0780", traceno) ;
+    		APPLOG("D","获取的平台流水为:[%ld]",traceno);
+    		strcpy(Mxip_rc, "0000");
+    		return 0;
+	   }
+           
+           ----->取流水<-----
+           epcc_getseqence.pc
+
+           #include "kernel/syspub.h"
+           EXEC SQL INCLUDE sqlca.h;
+           int epcc_getseqence(long *seq, char *reply)
+          {
+            	EXEC SQL BEGIN DECLARE SECTION;
+            	long  nextseq ;
+            	short seqind ;
+            	EXEC SQL END   DECLARE SECTION;
+
+            	EXEC SQL SELECT epcc.epcc_sequence.nextval INTO :nextseq:seqind FROM DUAL;
+            	if(sqlca.sqlcode)
+           	{
+              		APPLOG("E","获取流水号失败[%d]",sqlca.sqlcode);
+              		return sqlca.sqlcode;
+           	}
+           	if(seqind)
+          	{
+            		APPLOG("E","获取流水号失败[%d]",sqlca.sqlcode);
+            		return sqlca.sqlcode;
+          	}
+          	*seq = nextseq ;
+          	return 0;
+           }         
+-------------------------------------------------------------------------------------------------------
+64:
+清理
+su - oracle
+sqlplus / as sysdba                
+rman target  / 
+delete archivelog until time 'sysdate-30';                                 
+-------------------------------------------------------------------------------------------------------
+65:
+求最大公约数简单方法
+int gcd(int x, int y) {
+  return y?gcd(y,x%y):x;
+}
+-------------------------------------------------------------------------------------------------------
+66:
+aix查看core文件
+    file core    --查看哪个bin程序产生的core文件，假如是 callTest 程序
+    dbx callTest core   ---对core文件进行分析 
+    where   ---查看具体的信息
+-------------------------------------------------------------------------------------------------------
+ln -fs 2.txt 1.txt     2依赖于1
+ln -fs li.so wei.so    li依赖于wei
+-------------------------------------------------------------------------------------------------------
+char型和varchar型区别：
+     varchar2(3)：可以存储3个字节长度，如'啊a'、'aaa'；
+
+varchar2(3 char)：可以存储3个字符（包括字母和汉字），如'啊啊啊'、'aaa'、'啊aa'
+   char[10]='1234      '  不足10位补空格,因为后续取值需要去空格。
+varchar[10]='1234'        实际几位就存几位,无需去空格。 
+----------------------------------------------------------------------------------------------------------------------------------------------
+多表查询:
+select * from xipdb2.epcc_trlog a,(select * from xipdb2.epcc_chktrlog b where tx_sts='01')b where a.epcc_trace=b.epcc_trace and a.tx_amt=b.tx_amt and plat_date=20180728 and a.txsts='00'
+
+select * from xipdb2.epcc_trlog where epcc_date=20181219 and instgid='Z0000000000088'  and txcode='FF21101' and epcc_trace not in (select epcc_trace from xipdb2.epcc_chktrlog where epcc_date=20181219 and instgid='Z0000000000088');
+
+update epcc_trlog a set tx_amt=(select b.tx_amt from epcc_chktrlog b where b.epcc_trace=a.epcc_trace and b.chk_sts!='1' and b.tx_sts='03') where exists 
+(select 1 from epcc_chktrlog b where b.epcc_trace=a.epcc_trace and a.rp_flag='2' and a.epcc_date=28880808 and a.instgid='Z0000000000088' and a.txctgy='0120')
+----------------------------------------------------------------------------------------------------------------------------------------------
+cu_get_cu_msqid             cu_get_sas_msqid
+cu_get_tx_msqid
+----------------------------------------------------------------------------------------------------------------------------------------------
+%-10s  不足10位,用空格自动补齐10位
+%.10s  只取前10位置,空格自动压缩 
+----------------------------------------------------------------------------------------------------------------------------------------------
+iconv -f utf8 -t gb18030 aaa.txt > bbb.txt      //从utf8转为GBK
+iconv -f gb18030 -t utf8 aaa.txt > bbb.txt      //从GBK转为utf8
+----------------------------------------------------------------------------------------------------------------------------------------------
+查看路径下最近4天被修改过的文件
+find /app/user/commit/20190703 -mtime -4  -type f -print
+----------------------------------------------------------------------------------------------------------------------------------------------
+double精确损失解决方法:
+roundamt
+----------------------------------------------------------------------------------------------------------------------------------------------
+TCP粘包原因:
+发送的报文长度与实际报文体长度不一致，解决方法是按照实际长度发送报文体即可。
+----------------------------------------------------------------------------------------------------------------------------------------------
+linux下02%X
+asc_to_bcd(myDepinBCD, myDepinASC, 16, 0) ;
+bcd_to_asc(hstpin    , myDepinBCD, 16, 0) ;
+----------------------------------------------------------------------------------------------------------------------------------------------
+make
+makejar
+java -jar shareniu.jar &
+----------------------------------------------------------------------------------------------------------------------------------------------
+sprintf(b,"%0*d%s",8-strlen(a),0,a);
+----------------------------------------------------------------------------------------------------------------------------------------------
+查看服务器核数
+grep -c 'processor' /proc/cpuinfo 
+----------------------------------------------------------------------------------------------------------------------------------------------
+对文件去重并排序
+sort -uno linux_sort_user_id.txt user_id.txt
+sort -uo target.txt comfrom.txt
+----------------------------------------------------------------------------------------------------------------------------------------------
+sed -n '100,200p' filename >tmp.txt
+sed -n  '/2018-08-22 14:45:/,/2018-08-22 14:46:/p' catalina.log >target.txt
+----------------------------------------------------------------------------------------------------------------------------------------------
+解决办法（数据库290）
+ list tablespaces show detail 显示表空间状态
+找到State 不等于 0x0000的那一段
+看Object ID = 50
+select tabname from syscat.tables where tableid=50 通过所住的id号找出是哪个表
+quiesce tablespaces for table test reset 执行该命令清除错误的状态（test是出错的表明）
+----------------------------------------------------------------------------------------------------------------------------------------------
+linux:
+      printf "%d\n" 0x38  以10进制打印输出
+----------------------------------------------------------------------------------------------------------------------------------------------
+cc tranpin.c libunionEsscAPI.a                    编译时链接库
+cc tranpin.c MD5.c                                编译时链接程序
+----------------------------------------------------------------------------------------------------------------------------------------------
+MQ报错2035
+https://www.cnblogs.com/yangjinbiao/p/6389994.html
+runmqsc 队列管理器
+ALTER QMGR CHLAUTH(DISABLED)
+ALTER QMGR CONNAUTH(' ') 
+REFRESH SECURITY TYPE(CONNAUTH)
+
+启动通道：
+reset chl(613121000015.0600.O1) seqnum(1)
+
+停止通道：
+reset chl(613121000015.0600.O1) seqnum(1)
+
+重置通道序号：
+reset chl(613121000015.0600.O1) seqnum(1)
+
+清除死信队列：
+clear ql(DLQ)
+
+ONLINE O 单笔
+BATCH  B 批量
+
+crtmqm -ld /var/mqm/log -lc -lf 5120 -lp 50  -ls 30 XIP_CLU_QM
+strmqm XIP_CLU_QM
+runmqsc XIP_CLU_QM<<!
+def ql(MIVSANSQL) defpsist(YES) maxdepth(100000) MAXMSGL(4096000) replace
+def ql(CNAPS2ANSQL) defpsist(YES) maxdepth(100000) MAXMSGL(4096000) replace
+def ql(CUPSANSQL) defpsist(YES) maxdepth(100000) MAXMSGL(4096000) replace
+def chl(SVCONNCH) chltype(SVRCONN) trptype(tcp) MCAUSER('mqm') MAXMSGL(4096000) replace
+alter qmgr chlauth(DISABLED)
+alter qmgr ccsid(819)
+def listener(lsr.xip_clu) trptype(tcp) port(1801) control(qmgr)
+start listener(lsr.xip_clu)
+!
+----------------------------------------------------------------------------------------------------------------------------------------------
+#打包程序脚本配置
+#!/bin/bash
+today=`date +%Y%m%d`
+path=./suitm$today  
+rm -rf path
+mkdir path
+#打包程序
+mkdir -p $path/src
+cp -r $HOME/src/.kernel/ $path/src
+cp -r $HOME/src/epcc/ $path/src
+cp -r $HOME/src/incl/ $path/src
+cp -r $HOME/src/hostcli/ $path/src
+cp -r $HOME/src/counter/ $path/src
+cp -r $HOME/src/test/ $path/src
+#配置文件
+cp -r $HOME/etc/ $path/
+#binsh
+cp -r $HOME/binsh/ $path/
+#日志
+mkdir -p $path/log
+zip -r $path/log/log.zip $HOME/log
+
+
+# 整体打包
+zip -r $path.zip $path
+----------------------------------------------------------------------------------------------------------------------------------------------
+统计每条出现的次数,并排序：
+awk  '{a[$0]++}END{for(i in a){print i,a[i]| "sort -n -k 2" }}'  XD.cfg 
+----------------------------------------------------------------------------------------------------------------------------------------------
+截取指定区间的列：
+grep -i "run_" real.log | awk '{print $5, $6}'
+----------------------------------------------------------------------------------------------------------------------------------------------
+限流
+ps -aef | grep \"EPCCBB-F\" | grep \"EpccTcpServer\"|grep -v \"grep\"|wc -l 2>/dev/null
+----------------------------------------------------------------------------------------------------------------------------------------------
+db2数据库增加字段
+alter table RT_InsuranceBuy add column GipInsurerCode  CHAR(2);
+alter table RT_InsuranceBuy add column ImportFlag  CHAR(1);
+db2数据库扩字段：
+alter table SD_RESP_CODE alter ACCESS_RESP_MSG set data type varchar(64)
+----------------------------------------------------------------------------------------------------------------------------------------------
+压测生成测试报告
+jmeter -n -t D:\apache-jmeter-3.0\Test.jmx -l result.jtl -e -o res
+----------------------------------------------------------------------------------------------------------------------------------------------
+MQ队列启停
+dspmq得到：
+                QMNAME(XIP_CLU_QM)                                        STATUS(正在运行)
+停止队列管理器：endmqm -i XIP_CLU_QM
+启动队列管理器：strmqm XIP_CLU_QM
+----------------------------------------------------------------------------------------------------------------------------------------------
+解决ISO-8859乱码
+file test.sh 
+ISO-8859 test
+iconv -f GBK -t utf-8 -o test.cpp test.cpp
+----------------------------------------------------------------------------------------------------------------------------------------------
+动态库依赖：
+gcc -fPIC -shared caculate.c -o libcaculate.so 
+cc test.c libcaculate.so 
+gcc -rdynamic -o main main.c -ldl
+printf("%d\n",fpr(2,2));
+----------------------------------------------------------------------------------------------------------------------------------------------
+# !bin/bash
+awk -F: '{print $5| "sort -n" }'  1.txt>liwei.log      按":"符截取第5段
+awk -F耗时 '{print $2| "sort -n" }'  1.txt>liwei.log   按"耗时"截取第2段
+----------------------------------------------------------------------------------------------------------------------------------------------
+JVM CPU耗时内存
+top
+top -Hp 进程id
+printf "%x\n" 打印16进制线程id
+jstack 进程id >target.log
+jstack 进程id | grep 16进制线程id
+进入target.log中，查询16进制线程id
+----------------------------------------------------------------------------------------------------------------------------------------------
+备份表:
+create table bak as(select * from table) definition only;
+insert into bak (select * from table);
+----------------------------------------------------------------------------------------------------------------------------------------------
+1.左连接  left join 或 left outer join
+
+SQL语句：select * from student left join score on student.Num=score.Stu_id;
+
+2.右连接  right join 或 right outer join
+
+SQL语句：select * from student right join score on student.Num=score.Stu_id;
+
+3.完全外连接  full join 或 full outer join
+
+SQL语句：select * from student full join score on student.Num=score.Stu_id;
+----------------------------------------------------------------------------------------------------------------------------------------------
+查看tcp各个连接状态的数量
+1：
+netstat -n | awk '/^tcp/ {++S[$NF]} END {for(a in S) print a, S[a]}'
+2：
+netstat -tan|awk '$1~/tcp/{aa[$NF]++}END{for (h in aa)print h,aa[h]}'
+SYN_SENT 1
+ESTABLISHED 3
+LISTEN 15
+3：
+netstat -tan|awk '$1~/tcp/{print $NF}'|sort|uniq -c|sort -nr
+15 LISTEN
+3 ESTABLISHED
+1 SYN_SENT<br><br>
+----------------------------------------------------------------------------------------------------------------------------------------------

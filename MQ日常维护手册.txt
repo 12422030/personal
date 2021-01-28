@@ -1,0 +1,137 @@
+一. 简介
+1. MQ目录结构
+MQ系统错误记录目录：
+/var/mqm/errors
+
+MQ队列管理器目录（缺省情况下）
+/var/mqm/qmgrs/<QMName>
+注意：必须保证该目录下的任何文件不被修改，不被删除，否则MQ队列管理器将遭到致命破坏，无法恢复，本地消息全部丢失。
+
+
+二. 常用MQ系统命令
+1. 观察MQ队列管理器运行状态
+对于MQ 5.1及以下版本，通过ps –ef | grep <QMName>看下面进程是否存在：
+#amqzxma0 -m <QMName>
+对MQ 5.2或以上版本，执行如下命令检查队列管理器运行状态：
+#dspmq
+显示结果中<QMName>表示MQ队列管理器的名称，STATUS表示当前运行状态。
+运行状态有：
+Starting 正在启动
+Running 正在运行
+Ending 正在停止
+Ended normally 已经正常终止
+Ended immediately 已经立即终止
+Ended preemtively 已经强制终止
+Ended unexpectively 异常终止
+
+注意：停止系统后必须使用dspmq命令进行状态检查
+
+例：
+$dspmq
+显示结果
+QMNAME(QM0000A) STATUS（Running）
+QMNAME(QM0000B) STATUS（Ended normally）
+
+
+三. 使用MQSC脚本命令管理
+1. 进入指定队列管理器脚本命令控制台
+#runmqsc <QMName>
+
+具体命令：
+以mqm用户登陆
+runmqsc <QMName>
+2. 常用MQSC脚本命令
+查看所有通道状态
+DISPLAY CHSTATUS(*)
+若通道启动失败，需要检查、分析MQ队列管理器日志文件，可能原因包括：
+（1） 配置错误，如CONNAME。对于TCP协议，需确认对方IP和侦听端口（防火墙无限制）；对于LU62，需确认所用SNA session已建立且MQ正确引用。
+（2） 对应通道CCSID不一致，一般发生在新建MQ环境。
+（3） 对应通道MSN不一致，一般发生在其中一端做过变更后，如重建队列管理器、reset通道等。
+检查通道具体状态
+DISPLAY CHSTATUS(ChannelName) ALL
+检查队列配置和深度
+DIS QLOCAL(QName)
+该命令的显示结果可以看出队列当前深度
+
+
+四. 维护项目
+1. 实时监控以下文件系统使用情况：
+检查文件系统/var/mqm
+MQ应用所在文件系统。
+
+2. 定期报告MQ系统错误，备份清理MQ系统错误记录
+在遇到问题时，检查/var/mqm/errors目录下是否有新的FDC文件产生，如果有应当立即报告IBM技术支持部门。另外，要定期检查该目录下MQ错误日志。
+
+3. 监控队列深度
+DIS QLOCAL(QName)
+该命令的显示结果可以看出队列当前深度
+
+4. 检查死信队列
+DIS QLOCAL(DEADQName)
+
+5. 检查日志个数是否增长
+使用命令cd移动到MQ日志所在目录，使用ls –l|wc命令统计，如果有所增长，应立即报告IBM系统支持人员。
+
+6. 检查MQ队列管理器错误日志
+当系统运行不正常时首先检查：
+/var/mqm/qmgrs/<QMName>/errors/AMQERR0n.LOG
+
+
+7. 停止UNIX系统中运行的队列管理器
+（1） 首先正常停止：$endmqm  –w  <QMgr>
+如不能正常停止
+（2） $endmqm  –i  <QMgr>
+如不能正常停止
+（3） $endmqm  -p  <QMgr>
+如不能正常停止
+（4） 杀死有关进程和残留在系统内部的信号灯和共享内存：
+a) 执行ps命令找到运行的队列管理器程序进程ID。例如，如果队列管理器名为<QMgr>，那么可以使用下列命令：
+ps -ef | grep <QMgr>
+b) 终止所有仍在运行的队列管理器进程。使用 kill命令指定用 ps 命令发现的进程ID。 注: 无法停止的进程可使用kill -9来终止。
+按下列次序终止各个进程：
+amqpcsea 命令服务器
+amqhasmx 记录器
+amqharmx 日志格式化器（仅 LINEAR 日志）
+amqzllp0 检查点处理器
+amqzlaa0 队列管理器代理
+amqzxma0 处理控制器
+amqrrmfa 库进程（用于群集）
+注：人工停止队列管理器可能导致FFST的发生，并在/var/mqm/errors目录中产生FDC文件。不应该将此视为队列管理器中的缺陷。甚至在使用该方法停止队列管理器后，它仍应该正常重新启动。
+c) 杀死所有残留在系统内部的信号灯和共享内存（其属主和组均为mqm，需要用root或mqm用户来杀死）：
+ipcs -s| grep mqm | awk '{print $2}'|xargs -i ipcrm -s {}
+ipcs -m| grep mqm | awk '{print $2}'|xargs -i ipcrm -m {}
+注：停止队列管理器后，若重新启动失败，则可检查上次停止后是否有IPC资源未释放。若有将会导致启动失败，需要通过上述方法予以删除（注意不要误删！）。
+
+
+8. 检查、处理队列管理器pending事务
+若队列管理器启动成功后，CICS（配置XAD连接MQ）启动失败，则可以检查是否有pending事务，若有必须进行处理（可能造成数据的不一致性，必须事先加以确认），具体如下：
+$dspmqtrn –m <QMgr>
+$rsvmqtrn –m <QMgr> -a
+#resolves all internally-coordinated,in-doubt transactions
+$rsvmqtrn –m <QMgr> -b <Transaction number>
+#backout the named externally-coordinated transaction
+$rsvmqtrn –m <QMgr> -b <Transaction number>
+#commits the named externally-coordinated transaction
+$rsvmqtrn –m <QMgr> -r RMID <Transaction number>
+#For the named internally-coordinated transaction only 
+
+
+
+
+
+/opt/mqm/bin/runmqlsr -r -m QM_TIPS_0000_01 -t TCP -p 10000
+
+
+
+ MCAUSER(MUSR_MQADMIN) 
+
+alter  CHANNEL(SVRCONN)   CHLTYPE(SVRCONN) MCAUSER('mqm')
+
+alter  CHANNEL(SVRCONN)   CHLTYPE(SVRCONN) MCAUSER(' ')
+alter  CHANNEL(SVRCONN)   CHLTYPE(SVRCONN) MCAUSER('')
+
+SSLCAUTH(REQUIRED)
+
+手工读取mq消息：amqsget 对列名 队列管理器名
+/opt/mqm/samp/bin
+amqsget PBC.EXT.ONLINE.IN QM_TIPS_0000_01
